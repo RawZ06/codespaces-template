@@ -40,12 +40,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
-          cache-dependency-path: ./nestjs/pnpm-lock.yaml
 
       - name: Install dependencies
         working-directory: ./nestjs
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
 
       - name: Audit dependencies
         working-directory: ./nestjs
@@ -74,12 +72,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
-          cache-dependency-path: ./react/pnpm-lock.yaml
 
       - name: Install dependencies
         working-directory: ./react
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
 
       - name: Audit dependencies
         working-directory: ./react
@@ -104,12 +100,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
-          cache-dependency-path: ./vue/pnpm-lock.yaml
 
       - name: Install dependencies
         working-directory: ./vue
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
 
       - name: Audit dependencies
         working-directory: ./vue
@@ -134,12 +128,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
-          cache-dependency-path: ./angular/pnpm-lock.yaml
 
       - name: Install dependencies
         working-directory: ./angular
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
 
       - name: Audit dependencies
         working-directory: ./angular
