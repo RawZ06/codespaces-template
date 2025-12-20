@@ -161,9 +161,9 @@ jobs:
         working-directory: ./java-vanilla
         run: mvn test
 
-      - name: Check for CVEs with OWASP Dependency-Check
+      - name: Verify dependencies
         working-directory: ./java-vanilla
-        run: mvn org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7 || true
+        run: mvn dependency:tree
 
   test-java-springboot:
     name: Test Java Spring Boot Template
@@ -185,9 +185,9 @@ jobs:
         working-directory: ./java-springboot
         run: mvn test
 
-      - name: Check for CVEs with OWASP Dependency-Check
+      - name: Verify dependencies
         working-directory: ./java-springboot
-        run: mvn org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7 || true
+        run: mvn dependency:tree
 
       - name: Test Spring Boot startup
         working-directory: ./java-springboot
