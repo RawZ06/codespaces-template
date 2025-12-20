@@ -6,13 +6,26 @@ on:
     types:
       - completed
     branches: [ main ]
+  push:
+    branches: [ main ]
+    paths:
+      - 'node/**'
+      - 'nestjs/**'
+      - 'react/**'
+      - 'vue/**'
+      - 'angular/**'
+      - 'java-vanilla/**'
+      - 'java-springboot/**'
+      - 'python/**'
+      - 'c/**'
+      - 'php/**'
   workflow_dispatch: # Permet de lancer manuellement
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Ne build que si les tests ont réussi
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    # Ne build que si les tests ont réussi (ou si déclenché manuellement/par push)
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.event_name == 'push' }}
 
     steps:
       - name: Checkout repository

@@ -1,7 +1,6 @@
 package com.example.java_springboot.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,11 +10,10 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class HelloController {
-
-    private static final Logger log = LoggerFactory.getLogger(HelloController.class);
 
     @GetMapping("/hello")
     public Map<String, Object> hello(@RequestParam(value = "name", defaultValue = "World") String name) {
