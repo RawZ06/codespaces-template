@@ -1,0 +1,119 @@
+name: Build Templates
+
+on:
+  workflow_run:
+    workflows: ["Test Templates"]
+    types:
+      - completed
+    branches: [ main ]
+  workflow_dispatch: # Permet de lancer manuellement
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Ne build que si les tests ont réussi
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Nécessaire pour le commit
+
+      - name: Create output directory
+        run: mkdir -p output
+
+      - name: Zip Node.js template
+        run: |
+          zip -r output/node.zip node \
+            -x "*/node_modules/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip NestJS template
+        run: |
+          zip -r output/nestjs.zip nestjs \
+            -x "*/node_modules/*" \
+            -x "*/dist/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip React template
+        run: |
+          zip -r output/react.zip react \
+            -x "*/node_modules/*" \
+            -x "*/dist/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip Vue template
+        run: |
+          zip -r output/vue.zip vue \
+            -x "*/node_modules/*" \
+            -x "*/dist/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip Angular template
+        run: |
+          zip -r output/angular.zip angular \
+            -x "*/node_modules/*" \
+            -x "*/dist/*" \
+            -x "*/.angular/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip Java Vanilla template
+        run: |
+          zip -r output/java-vanilla.zip java-vanilla \
+            -x "*/target/*" \
+            -x "*/.mvn/*" \
+            -x "*/mvnw" \
+            -x "*/mvnw.cmd" \
+            -x "*/.DS_Store"
+
+      - name: Zip Java Spring Boot template
+        run: |
+          zip -r output/java-springboot.zip java-springboot \
+            -x "*/target/*" \
+            -x "*/.mvn/*" \
+            -x "*/mvnw" \
+            -x "*/mvnw.cmd" \
+            -x "*/.DS_Store"
+
+      - name: Zip Python template
+        run: |
+          zip -r output/python.zip python \
+            -x "*/__pycache__/*" \
+            -x "*/venv/*" \
+            -x "*/env/*" \
+            -x "*/.venv/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip C template
+        run: |
+          zip -r output/c.zip c \
+            -x "*/obj/*" \
+            -x "*/bin/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip PHP template
+        run: |
+          zip -r output/php.zip php \
+            -x "*/vendor/*" \
+            -x "*/.DS_Store"
+
+      - name: Display archive sizes
+        run: |
+          echo "📦 Archive sizes:"
+          ls -lh output/*.zip
+
+      - name: Commit and push archives
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add output/*.zip
+
+          # Vérifie s'il y a des changements à commiter
+          if git diff --staged --quiet; then
+            echo "✅ No changes to commit"
+          else
+            git commit -m "🤖 Update template archives [skip ci]"
+            git push
+            echo "✅ Archives updated and pushed"
+          fi

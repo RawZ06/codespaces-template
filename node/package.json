@@ -1,0 +1,12 @@
+{
+  "name": "node-template",
+  "version": "1.0.0",
+  "description": "Template Node.js minimal",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
