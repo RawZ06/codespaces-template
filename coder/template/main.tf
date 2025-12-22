@@ -167,22 +167,6 @@ resource "coder_agent" "main" {
       curl -L "$TEMPLATE_URL" -o template.zip
       unzip -q template.zip && rm template.zip
 
-      # Détecter le dossier créé par unzip (il y en a toujours un seul normalement)
-      EXTRACTED_DIR=$(ls -d */ 2>/dev/null | head -n 1 | sed 's:/$::')
-
-      if [ -n "$EXTRACTED_DIR" ] && [ -d "$EXTRACTED_DIR" ]; then
-        echo "   Moving files from extracted folder: $EXTRACTED_DIR"
-        # Déplacer tous les fichiers (y compris les cachés) vers le répertoire courant
-        shopt -s dotglob
-        mv "$EXTRACTED_DIR"/* . 2>/dev/null || true
-        shopt -u dotglob
-        # Supprimer le dossier vide
-        rmdir "$EXTRACTED_DIR" 2>/dev/null || true
-        echo "✓ Files extracted to workspace root."
-      else
-        echo "✓ Files extracted directly (no subfolder)."
-      fi
-
       # 3. Exécution et suppression du script de setup
       if [ -f ".coder-setup.sh" ]; then
         echo "🔧 Found .coder-setup.sh, executing and cleaning up..."
@@ -354,14 +338,14 @@ resource "docker_image" "coder_image" {
   build {
     context    = "/root/images/base"
     dockerfile = "Dockerfile"
-    no_cache   = true
+#    no_cache   = true
   }
   keep_locally = true
 
   # Force rebuild à chaque fois
-  triggers = {
-    always_rebuild = timestamp()
-  }
+#  triggers = {
+#    always_rebuild = timestamp()
+#  }
 }
 
 # Volume persistant pour /home/coder

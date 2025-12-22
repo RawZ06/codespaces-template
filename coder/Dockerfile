@@ -17,14 +17,13 @@ ENV MAVEN_VERSION=3.9.12
 ENV GRADLE_VERSION=9.2.1
 
 # Go ecosystem
-ENV ASDF_VERSION=v0.14.1
-# Go version will be project-driven via .tool-versions
+ENV GO_VERSION=1.22.4
 
 # Rust ecosystem
-# Rust version will be project-driven via rust-toolchain.toml
+ENV RUST_VERSION=1.77.2
 
 # PHP ecosystem
-# PHP version will be project-driven via .tool-versions
+ENV PHP_VERSION=8.5
 
 # Python (from Ubuntu 24.04 repos)
 # Python3 version: 3.12.x (managed by apt)
@@ -53,20 +52,7 @@ RUN apt-get update && apt-get install -y \
     python3-venv \
     zip \
     unzip \
-    pkg-config \
-    \
-    # PHP build deps (for asdf-php)
-    autoconf \
-    bison \
-    re2c \
-    libxml2-dev \
-    libsqlite3-dev \
-    libssl-dev \
-    libcurl4-openssl-dev \
-    libonig-dev \
-    libreadline-dev \
-    libzip-dev \
-    && rm -rf /var/lib/apt/lists/*
+    pkg-config
 
 # ============================================================================
 # LOCALES
@@ -121,27 +107,46 @@ RUN curl -s "https://get.sdkman.io?rcupdate=false" | bash && \
     sdk default gradle ${GRADLE_VERSION}"
 
 # ============================================================================
+# PHP – installation manuelle (version figée)
+# ============================================================================
+RUN sudo apt-get update && sudo apt-get install -y software-properties-common && \
+    sudo add-apt-repository -y ppa:ondrej/php && \
+    sudo apt-get update
+
+RUN sudo apt-get install -y \
+    php${PHP_VERSION} \
+    php${PHP_VERSION}-cli \
+    php${PHP_VERSION}-common \
+    php${PHP_VERSION}-mbstring \
+    php${PHP_VERSION}-xml \
+    php${PHP_VERSION}-soap \
+    php${PHP_VERSION}-intl \
+    php${PHP_VERSION}-sqlite3 \
+    php${PHP_VERSION}-curl \
+    php${PHP_VERSION}-zip
+
+RUN sudo apt-get install -y \
+    php${PHP_VERSION} \
+    php${PHP_VERSION}-cli \
+    php${PHP_VERSION}-common \
+    php${PHP_VERSION}-mbstring \
+    php${PHP_VERSION}-xml \
+    php${PHP_VERSION}-soap \
+    php${PHP_VERSION}-intl \
+    php${PHP_VERSION}-sqlite3 \
+    php${PHP_VERSION}-curl \
+    php${PHP_VERSION}-zip
+
+# ============================================================================
 # COMPOSER (PHP dependency manager)
 # ============================================================================
+# Assure-toi que le dossier existe
+RUN mkdir -p /home/coder/.local/bin
 
+# Installer Composer
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/home/coder/.local/bin \
     --filename=composer
-
-# ============================================================================
-# ASDF (Go, PHP, optional Python)
-# ============================================================================
-
-ENV ASDF_DIR=/home/coder/.asdf
-RUN git clone https://github.com/asdf-vm/asdf.git $ASDF_DIR --branch ${ASDF_VERSION}
-
-RUN bash -c "\
-    source $ASDF_DIR/asdf.sh && \
-    asdf plugin add golang https://github.com/asdf-community/asdf-golang.git && \
-    asdf plugin add php https://github.com/asdf-community/asdf-php.git \
-"
-
-# No global install → versions selected per project via .tool-versions
 
 # ============================================================================
 # RUST (rustup)
@@ -149,9 +154,23 @@ RUN bash -c "\
 
 ENV CARGO_HOME=/home/coder/.cargo
 ENV RUSTUP_HOME=/home/coder/.rustup
+ENV PATH="$CARGO_HOME/bin:$PATH"
 
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-# Rust version managed per project via rust-toolchain.toml
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain ${RUST_VERSION}
+
+# ============================================================================
+# GO (version figée)
+# ============================================================================
+ENV GOROOT=/home/coder/.local/go
+ENV GOPATH=/home/coder/go
+ENV PATH="$GOROOT/bin:$GOPATH/bin:$PATH"
+
+RUN curl -fsSL https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz -o go.tar.gz && \
+    mkdir -p "$GOROOT" && \
+    tar -C "$GOROOT" --strip-components=1 -xzf go.tar.gz && \
+    rm go.tar.gz
+
+RUN go version
 
 # ============================================================================
 # SHELL CONFIG (bash / profile)
@@ -161,18 +180,22 @@ RUN echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc && \
     echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.bashrc && \
     echo 'export SDKMAN_DIR="$HOME/.sdkman"' >> ~/.bashrc && \
     echo '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"' >> ~/.bashrc && \
-    echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc && \
-    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc && \
+    echo 'export CARGO_HOME="$HOME/.cargo"' >> ~/.bashrc && \
+    echo 'export RUSTUP_HOME="$HOME/.rustup"' >> ~/.bashrc && \
+    echo 'export GOROOT="$HOME/.local/go"' >> ~/.bashrc && \
+    echo 'export GOPATH="$HOME/go"' >> ~/.bashrc && \
+    echo 'export PATH="/usr/local/bin:/usr/bin:$GOROOT/bin:$GOPATH/bin:$CARGO_HOME/bin:$HOME/.local/bin:$PATH"' >> ~/.bashrc && \
     \
     echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.profile && \
     echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.profile && \
     echo 'export SDKMAN_DIR="$HOME/.sdkman"' >> ~/.profile && \
     echo '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"' >> ~/.profile && \
-    echo '. "$HOME/.asdf/asdf.sh"' >> ~/.profile && \
-    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.profile && \
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && \
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.profile
-
+    echo 'export CARGO_HOME="$HOME/.cargo"' >> ~/.profile && \
+    echo 'export RUSTUP_HOME="$HOME/.rustup"' >> ~/.profile && \
+    echo 'export GOROOT="$HOME/.local/go"' >> ~/.profile && \
+    echo 'export GOPATH="$HOME/go"' >> ~/.profile && \
+    echo 'export PATH="/usr/local/bin:/usr/bin:$GOROOT/bin:$GOPATH/bin:$CARGO_HOME/bin:$HOME/.local/bin:$PATH"' >> ~/.profile
+    
 WORKDIR /home/coder
 
 # Pas de ENTRYPOINT ni CMD - Coder va gérer ça via l'agent

@@ -279,14 +279,14 @@ resource "docker_image" "coder_image" {
   build {
     context    = "/root/images/base"
     dockerfile = "Dockerfile"
-    no_cache   = true
+#    no_cache   = true
   }
   keep_locally = true
 
   # Force rebuild à chaque fois
-  triggers = {
-    always_rebuild = timestamp()
-  }
+#  triggers = {
+#    always_rebuild = timestamp()
+#  }
 }
 
 # Volume persistant pour /home/coder
