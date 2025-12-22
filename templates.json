@@ -1,0 +1,170 @@
+[
+  {
+    "name": "Node.js",
+    "value": "node",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/node.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/node.zip",
+    "folder": "node",
+    "ports": []
+  },
+  {
+    "name": "Node.js TypeScript",
+    "value": "node-ts",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/typescript.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/node-ts.zip",
+    "folder": "node-ts",
+    "ports": []
+  },
+  {
+    "name": "Node.js Fastify",
+    "value": "node-fastify",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/fastify.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/node-fastify.zip",
+    "folder": "node-fastify",
+    "ports": [3000]
+  },
+  {
+    "name": "Python",
+    "value": "python",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/python.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/python.zip",
+    "folder": "python",
+    "ports": []
+  },
+  {
+    "name": "Python FastAPI",
+    "value": "python-fastapi",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/fastapi.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/python-fastapi.zip",
+    "folder": "python-fastapi",
+    "ports": [8000]
+  },
+  {
+    "name": "Go",
+    "value": "go",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/go.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/go.zip",
+    "folder": "go",
+    "ports": []
+  },
+  {
+    "name": "C++",
+    "value": "cpp",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/cpp.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/cpp.zip",
+    "folder": "cpp",
+    "ports": []
+  },
+  {
+    "name": "Rust",
+    "value": "rust",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/rust.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/rust.zip",
+    "folder": "rust",
+    "ports": []
+  },
+  {
+    "name": "C",
+    "value": "c",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/c.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/c.zip",
+    "folder": "c",
+    "ports": []
+  },
+  {
+    "name": "PHP",
+    "value": "php",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/php.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/php.zip",
+    "folder": "php",
+    "ports": [8000]
+  },
+  {
+    "name": "NestJS",
+    "value": "nestjs",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/nestjs.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/nestjs.zip",
+    "folder": "nestjs",
+    "ports": [3000]
+  },
+  {
+    "name": "React",
+    "value": "react",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/react.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/react.zip",
+    "folder": "react",
+    "ports": [5173]
+  },
+  {
+    "name": "Vue",
+    "value": "vue",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/vue.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/vue.zip",
+    "folder": "vue",
+    "ports": [5173]
+  },
+  {
+    "name": "Angular",
+    "value": "angular",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/angular.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/angular.zip",
+    "folder": "angular",
+    "ports": [4200]
+  },
+  {
+    "name": "Next.js",
+    "value": "nextjs",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/nextjs.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/nextjs.zip",
+    "folder": "nextjs",
+    "ports": [3000]
+  },
+  {
+    "name": "Nuxt",
+    "value": "nuxt",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/nuxt.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/nuxt.zip",
+    "folder": "nuxt",
+    "ports": [3000]
+  },
+  {
+    "name": "Static HTML/CSS/JS",
+    "value": "static-server",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/html.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/static-server.zip",
+    "folder": "static-server",
+    "ports": [8080]
+  },
+  {
+    "name": "Laravel",
+    "value": "laravel",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/laravel.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/laravel.zip",
+    "folder": "laravel",
+    "ports": [8000]
+  },
+  {
+    "name": "AdonisJS",
+    "value": "adonis",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/adonis.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/adonis.zip",
+    "folder": "adonis",
+    "ports": [3333]
+  },
+  {
+    "name": "Java",
+    "value": "java-vanilla",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/java.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/java-vanilla.zip",
+    "folder": "java-vanilla",
+    "ports": []
+  },
+  {
+    "name": "Spring Boot",
+    "value": "java-springboot",
+    "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/spring.svg",
+    "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/java-springboot.zip",
+    "folder": "java-springboot",
+    "ports": [8080]
+  }
+]

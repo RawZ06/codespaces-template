@@ -9,18 +9,51 @@ Collection de templates prêts à l'emploi pour initialiser des workspaces Coder
 
 ## 📦 Templates disponibles
 
+### Templates simples (Hello World)
+
 | Template | Description | Technologies |
 |----------|-------------|--------------|
-| **node** | Node.js minimal | Node.js, npm/pnpm |
+| **node** | Node.js minimal | Node.js, npm |
+| **node-ts** | Node.js avec TypeScript | Node.js, TypeScript, pnpm |
+| **python** | Python minimal | Python 3.12+ |
+| **go** | Go minimal | Go 1.23+ |
+| **cpp** | C++ minimal | C++23, g++, Make |
+| **rust** | Rust minimal | Rust 1.80+, Cargo |
+| **c** | Projet C avec Makefile | GCC, Make |
+| **php** | PHP minimal | PHP 8+, Composer |
+
+### Templates backend (API)
+
+| Template | Description | Technologies |
+|----------|-------------|--------------|
+| **node-fastify** | API Node.js avec Fastify | Fastify 5+, TypeScript, pnpm |
+| **python-fastapi** | API Python avec FastAPI | FastAPI 0.115+, Python 3.12+ |
 | **nestjs** | Framework NestJS | NestJS, TypeScript, pnpm |
+| **java-springboot** | Spring Boot avec démo | Java 25, Spring Boot 4.0.0, H2, Lombok |
+
+### Templates complets (Full-stack)
+
+| Template | Description | Technologies |
+|----------|-------------|--------------|
+| **laravel** | Framework Laravel | Laravel 11+, PHP 8.2+ |
+| **adonis** | Framework AdonisJS | AdonisJS 6+, TypeScript, Node.js |
+
+### Templates frontend
+
+| Template | Description | Technologies |
+|----------|-------------|--------------|
 | **react** | Application React | React 19, Vite, TypeScript, pnpm |
 | **vue** | Application Vue | Vue 3, Vite, TypeScript, pnpm |
 | **angular** | Application Angular | Angular (dernière version), pnpm |
+| **nextjs** | Next.js avec App Router | Next.js 15+, React 19, TypeScript, Tailwind |
+| **nuxt** | Nuxt avec TypeScript | Nuxt 4+, Vue 3, TypeScript |
+| **static-server** | Site statique simple | HTML5, CSS3, JavaScript ES6+ |
+
+### Templates avancés
+
+| Template | Description | Technologies |
+|----------|-------------|--------------|
 | **java-vanilla** | Java Maven minimal | Java 25, Maven, JUnit 5 |
-| **java-springboot** | Spring Boot avec démo | Java 25, Spring Boot 4.0.0, H2, Lombok |
-| **python** | Python minimal | Python 3 |
-| **c** | Projet C avec Makefile | GCC, Make |
-| **php** | PHP minimal | PHP 8+, Composer |
 
 ## 🚀 Utilisation avec Coder
 
@@ -32,14 +65,14 @@ Les templates sont automatiquement zippés et disponibles via GitHub:
 # Dans votre template Coder
 wget https://raw.githubusercontent.com/VOTRE-USER/templates/main/output/react.zip
 unzip react.zip
-cd react
+cd templates/react
 ```
 
 ### Méthode 2: Clone du repo
 
 ```bash
 git clone https://github.com/VOTRE-USER/templates.git
-cd templates/react
+cd templates/templates/react
 ```
 
 ## 🏗️ Structure du projet
@@ -49,14 +82,44 @@ cd templates/react
 ├── .github/workflows/
 │   ├── test-templates.yml     # Tests & audit CVE
 │   └── build-templates.yml    # Packaging des templates
+├── templates/                  # Tous les templates
+│   ├── node/                  # Template Node.js
+│   ├── node-ts/               # Template Node.js TypeScript
+│   ├── node-fastify/          # Template Fastify API
+│   ├── python/                # Template Python
+│   ├── python-fastapi/        # Template FastAPI
+│   ├── go/                    # Template Go
+│   ├── cpp/                   # Template C++
+│   ├── rust/                  # Template Rust
+│   ├── nestjs/                # Template NestJS
+│   ├── react/                 # Template React
+│   ├── vue/                   # Template Vue
+│   ├── angular/               # Template Angular
+│   ├── nextjs/                # Template Next.js
+│   ├── nuxt/                  # Template Nuxt
+│   ├── laravel/               # Template Laravel
+│   ├── adonis/                # Template AdonisJS
+│   ├── static-server/         # Template Static
+│   ├── java-vanilla/          # Template Java
+│   ├── java-springboot/       # Template Spring Boot
+│   ├── c/                     # Template C
+│   └── php/                   # Template PHP
 ├── output/                     # Archives générées automatiquement
 │   ├── node.zip
+│   ├── node-ts.zip
+│   ├── node-fastify.zip
+│   ├── python-fastapi.zip
+│   ├── go.zip
+│   ├── cpp.zip
+│   ├── rust.zip
 │   ├── react.zip
+│   ├── nextjs.zip
+│   ├── nuxt.zip
+│   ├── laravel.zip
+│   ├── adonis.zip
+│   ├── static-server.zip
 │   └── ...
-├── node/                       # Template Node.js
-├── nestjs/                     # Template NestJS
-├── react/                      # Template React
-└── ...
+└── assets/                     # Icônes des templates
 ```
 
 ## ⚙️ Fonctionnement (CI/CD Pipeline)
@@ -77,8 +140,8 @@ cd templates/react
 ## 🔄 Mise à jour d'un template
 
 ```bash
-# Modifier le template
-cd react
+# Modifier un template
+cd templates/react
 # ... faire vos modifications ...
 
 # Commit et push
@@ -87,32 +150,50 @@ git commit -m "Update React template"
 git push
 
 # La GitHub Action va automatiquement:
+# - Tester le template
 # - Créer react.zip
 # - Le commiter dans /output
 # - L'URL reste la même !
 ```
 
-## 🎯 Versions
+## 🎯 Versions et technologies
 
-### Java Templates
-- **Java 25** (LTS - Septembre 2025)
+### Langages simples
+- **Go** 1.23+ (dernière version stable)
+- **C++** 23 (dernier standard)
+- **Rust** 1.80+ (Edition 2021)
+- **Python** 3.12+
+- **Node.js** 20+
+- **TypeScript** 5.7+
+
+### Frameworks Backend
+- **Fastify** 5.2+ (framework web ultra-rapide)
+- **FastAPI** 0.115+ (framework Python moderne)
+- **NestJS** (dernière version)
+- **Spring Boot** 4.0.0 (Jakarta EE 11, Spring Framework 7)
+- **Laravel** 11+ (PHP 8.2+)
+- **AdonisJS** 6+ (TypeScript, Lucid ORM)
+
+### Frameworks Frontend
+- **React** 19 avec Vite
+- **Vue** 3 avec Vite
+- **Angular** (dernière version)
+- **Next.js** 15+ (App Router, React 19, Turbopack)
+- **Nuxt** 4+ (Vue 3, Nitro)
+
+### Java
+- **Java** 25 (LTS - Septembre 2025)
   - Scoped Values (JEP 506)
   - Compact Source Files (JEP 512)
   - Flexible Constructor Bodies (JEP 513)
 
-- **Spring Boot 4.0.0** (LTS)
-  - Jakarta EE 11
-  - Spring Framework 7
-  - Support OpenTelemetry
-  - Modularisation complète
-
-### Frontend Templates
-- React 19 avec Vite
-- Vue 3 avec Vite
-- Angular (dernière version)
-- NestJS (dernière version)
-
-Tous les projets Node.js/frontend utilisent **pnpm** comme package manager.
+### Package Managers
+- Projets Node.js/Frontend: **pnpm** (recommandé)
+- Python: **pip** ou **uv**
+- PHP: **Composer**
+- Go: modules Go natifs
+- Rust: **Cargo**
+- Java: **Maven**
 
 ## 📝 Exemple d'intégration Coder
 
@@ -143,8 +224,13 @@ variable "template_choice" {
   default     = "react"
   validation {
     condition = contains([
-      "node", "nestjs", "react", "vue", "angular",
-      "java-vanilla", "java-springboot", "python", "c", "php"
+      "node", "node-ts", "node-fastify",
+      "python", "python-fastapi",
+      "go", "cpp", "rust", "c",
+      "nestjs", "react", "vue", "angular",
+      "nextjs", "nuxt", "static-server",
+      "laravel", "adonis",
+      "java-vanilla", "java-springboot", "php"
     ], var.template_choice)
   }
 }
@@ -158,12 +244,12 @@ git clone https://github.com/VOTRE-USER/templates.git
 cd templates
 
 # Travailler sur un template
-cd react
+cd templates/react
 pnpm install
 pnpm dev
 
 # Tester la création d'archives localement
-zip -r ../output/react.zip . -x "*/node_modules/*"
+zip -r ../../output/react.zip . -x "*/node_modules/*"
 ```
 
 ## 📚 Documentation

@@ -28,34 +28,34 @@ jobs:
 
       - name: Zip Node.js template
         run: |
-          zip -r output/node.zip node \
+          zip -r output/node.zip templates/node \
             -x "*/node_modules/*" \
             -x "*/.DS_Store"
 
       - name: Zip NestJS template
         run: |
-          zip -r output/nestjs.zip nestjs \
+          zip -r output/nestjs.zip templates/nestjs \
             -x "*/node_modules/*" \
             -x "*/dist/*" \
             -x "*/.DS_Store"
 
       - name: Zip React template
         run: |
-          zip -r output/react.zip react \
+          zip -r output/react.zip templates/react \
             -x "*/node_modules/*" \
             -x "*/dist/*" \
             -x "*/.DS_Store"
 
       - name: Zip Vue template
         run: |
-          zip -r output/vue.zip vue \
+          zip -r output/vue.zip templates/vue \
             -x "*/node_modules/*" \
             -x "*/dist/*" \
             -x "*/.DS_Store"
 
       - name: Zip Angular template
         run: |
-          zip -r output/angular.zip angular \
+          zip -r output/angular.zip templates/angular \
             -x "*/node_modules/*" \
             -x "*/dist/*" \
             -x "*/.angular/*" \
@@ -63,7 +63,7 @@ jobs:
 
       - name: Zip Java Vanilla template
         run: |
-          zip -r output/java-vanilla.zip java-vanilla \
+          zip -r output/java-vanilla.zip templates/java-vanilla \
             -x "*/target/*" \
             -x "*/.mvn/*" \
             -x "*/mvnw" \
@@ -72,7 +72,7 @@ jobs:
 
       - name: Zip Java Spring Boot template
         run: |
-          zip -r output/java-springboot.zip java-springboot \
+          zip -r output/java-springboot.zip templates/java-springboot \
             -x "*/target/*" \
             -x "*/.mvn/*" \
             -x "*/mvnw" \
@@ -81,7 +81,7 @@ jobs:
 
       - name: Zip Python template
         run: |
-          zip -r output/python.zip python \
+          zip -r output/python.zip templates/python \
             -x "*/__pycache__/*" \
             -x "*/venv/*" \
             -x "*/env/*" \
@@ -90,15 +90,91 @@ jobs:
 
       - name: Zip C template
         run: |
-          zip -r output/c.zip c \
+          zip -r output/c.zip templates/c \
             -x "*/obj/*" \
             -x "*/bin/*" \
             -x "*/.DS_Store"
 
       - name: Zip PHP template
         run: |
-          zip -r output/php.zip php \
+          zip -r output/php.zip templates/php \
             -x "*/vendor/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip Go template
+        run: |
+          zip -r output/go.zip templates/go \
+            -x "*/.DS_Store"
+
+      - name: Zip C++ template
+        run: |
+          zip -r output/cpp.zip templates/cpp \
+            -x "*/bin/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip Rust template
+        run: |
+          zip -r output/rust.zip templates/rust \
+            -x "*/target/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip Node TS template
+        run: |
+          zip -r output/node-ts.zip templates/node-ts \
+            -x "*/node_modules/*" \
+            -x "*/dist/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip Node Fastify template
+        run: |
+          zip -r output/node-fastify.zip templates/node-fastify \
+            -x "*/node_modules/*" \
+            -x "*/dist/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip Python FastAPI template
+        run: |
+          zip -r output/python-fastapi.zip templates/python-fastapi \
+            -x "*/__pycache__/*" \
+            -x "*/venv/*" \
+            -x "*/env/*" \
+            -x "*/.venv/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip Laravel template
+        run: |
+          zip -r output/laravel.zip templates/laravel \
+            -x "*/node_modules/*" \
+            -x "*/vendor/*" \
+            -x "*/storage/*" \
+            -x "*/bootstrap/cache/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip Adonis template
+        run: |
+          zip -r output/adonis.zip templates/adonis \
+            -x "*/node_modules/*" \
+            -x "*/build/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip Next.js template
+        run: |
+          zip -r output/nextjs.zip templates/nextjs \
+            -x "*/node_modules/*" \
+            -x "*/.next/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip Nuxt template
+        run: |
+          zip -r output/nuxt.zip templates/nuxt \
+            -x "*/node_modules/*" \
+            -x "*/.nuxt/*" \
+            -x "*/.output/*" \
+            -x "*/.DS_Store"
+
+      - name: Zip Static Server template
+        run: |
+          zip -r output/static-server.zip templates/static-server \
             -x "*/.DS_Store"
 
       - name: Display archive sizes

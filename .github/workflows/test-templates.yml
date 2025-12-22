@@ -20,7 +20,7 @@ jobs:
           node-version: '20'
 
       - name: Test Node.js template
-        working-directory: ./node
+        working-directory: ./templates/node
         run: |
           npm install
           node index.js
@@ -42,19 +42,19 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        working-directory: ./nestjs
+        working-directory: ./templates/nestjs
         run: pnpm install --no-frozen-lockfile
 
       - name: Audit dependencies
-        working-directory: ./nestjs
+        working-directory: ./templates/nestjs
         run: pnpm audit --audit-level high || true
 
       - name: Build NestJS
-        working-directory: ./nestjs
+        working-directory: ./templates/nestjs
         run: pnpm run build
 
       - name: Test NestJS
-        working-directory: ./nestjs
+        working-directory: ./templates/nestjs
         run: pnpm run test
 
   test-react:
@@ -74,15 +74,15 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        working-directory: ./react
+        working-directory: ./templates/react
         run: pnpm install --no-frozen-lockfile
 
       - name: Audit dependencies
-        working-directory: ./react
+        working-directory: ./templates/react
         run: pnpm audit --audit-level high || true
 
       - name: Build React
-        working-directory: ./react
+        working-directory: ./templates/react
         run: pnpm run build
 
   test-vue:
@@ -102,15 +102,15 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        working-directory: ./vue
+        working-directory: ./templates/vue
         run: pnpm install --no-frozen-lockfile
 
       - name: Audit dependencies
-        working-directory: ./vue
+        working-directory: ./templates/vue
         run: pnpm audit --audit-level high || true
 
       - name: Build Vue
-        working-directory: ./vue
+        working-directory: ./templates/vue
         run: pnpm run build
 
   test-angular:
@@ -130,15 +130,15 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        working-directory: ./angular
+        working-directory: ./templates/angular
         run: pnpm install --no-frozen-lockfile
 
       - name: Audit dependencies
-        working-directory: ./angular
+        working-directory: ./templates/angular
         run: pnpm audit --audit-level high || true
 
       - name: Build Angular
-        working-directory: ./angular
+        working-directory: ./templates/angular
         run: pnpm run build
 
   test-java-vanilla:
@@ -154,15 +154,15 @@ jobs:
           java-version: '25'
 
       - name: Build Java Vanilla
-        working-directory: ./java-vanilla
+        working-directory: ./templates/java-vanilla
         run: mvn clean compile
 
       - name: Run tests
-        working-directory: ./java-vanilla
+        working-directory: ./templates/java-vanilla
         run: mvn test
 
       - name: Verify dependencies
-        working-directory: ./java-vanilla
+        working-directory: ./templates/java-vanilla
         run: mvn dependency:tree
 
   test-java-springboot:
@@ -178,19 +178,19 @@ jobs:
           java-version: '25'
 
       - name: Build Spring Boot
-        working-directory: ./java-springboot
+        working-directory: ./templates/java-springboot
         run: mvn clean package -DskipTests
 
       - name: Run tests
-        working-directory: ./java-springboot
+        working-directory: ./templates/java-springboot
         run: mvn test
 
       - name: Verify dependencies
-        working-directory: ./java-springboot
+        working-directory: ./templates/java-springboot
         run: mvn dependency:tree
 
       - name: Test Spring Boot startup
-        working-directory: ./java-springboot
+        working-directory: ./templates/java-springboot
         run: |
           # Lancer l'app en background
           java -jar target/*.jar &
@@ -223,20 +223,20 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        working-directory: ./python
+        working-directory: ./templates/python
         run: |
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
           fi
 
       - name: Check for CVEs with pip-audit
-        working-directory: ./python
+        working-directory: ./templates/python
         run: |
           pip install pip-audit
           pip-audit || true
 
       - name: Run Python script
-        working-directory: ./python
+        working-directory: ./templates/python
         run: python main.py
 
   test-c:
@@ -249,15 +249,15 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y gcc make
 
       - name: Build C project
-        working-directory: ./c
+        working-directory: ./templates/c
         run: make
 
       - name: Run C program
-        working-directory: ./c
+        working-directory: ./templates/c
         run: ./bin/program
 
       - name: Test clean
-        working-directory: ./c
+        working-directory: ./templates/c
         run: make clean && test ! -d obj && test ! -d bin
 
   test-php:
@@ -273,20 +273,194 @@ jobs:
           tools: composer
 
       - name: Validate composer.json
-        working-directory: ./php
+        working-directory: ./templates/php
         run: composer validate
 
       - name: Install dependencies
-        working-directory: ./php
+        working-directory: ./templates/php
         run: composer install --prefer-dist --no-progress
 
       - name: Check for CVEs
-        working-directory: ./php
+        working-directory: ./templates/php
         run: composer audit || true
 
       - name: Run PHP script
-        working-directory: ./php
+        working-directory: ./templates/php
         run: php public/index.php
+
+  test-go:
+    name: Test Go Template
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Build Go project
+        working-directory: ./templates/go
+        run: go build -o bin/app
+
+      - name: Run Go program
+        working-directory: ./templates/go
+        run: go run main.go
+
+  test-cpp:
+    name: Test C++ Template
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install G++
+        run: sudo apt-get update && sudo apt-get install -y g++ make
+
+      - name: Build C++ project
+        working-directory: ./templates/cpp
+        run: make
+
+      - name: Run C++ program
+        working-directory: ./templates/cpp
+        run: ./bin/program
+
+  test-rust:
+    name: Test Rust Template
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Build Rust project
+        working-directory: ./templates/rust
+        run: cargo build --release
+
+      - name: Run Rust program
+        working-directory: ./templates/rust
+        run: cargo run
+
+  test-node-ts:
+    name: Test Node TS Template
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: ./templates/node-ts
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build TypeScript
+        working-directory: ./templates/node-ts
+        run: pnpm build
+
+      - name: Run program
+        working-directory: ./templates/node-ts
+        run: pnpm start
+
+  test-node-fastify:
+    name: Test Node Fastify Template
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: ./templates/node-fastify
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Audit dependencies
+        working-directory: ./templates/node-fastify
+        run: pnpm audit --audit-level high || true
+
+      - name: Build TypeScript
+        working-directory: ./templates/node-fastify
+        run: pnpm build
+
+      - name: Test server startup
+        working-directory: ./templates/node-fastify
+        run: |
+          timeout 10s pnpm start &
+          sleep 5
+          curl -f http://localhost:3000/health || exit 1
+          curl -f http://localhost:3000/hello || exit 1
+
+  test-python-fastapi:
+    name: Test Python FastAPI Template
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        working-directory: ./templates/python-fastapi
+        run: pip install -r requirements.txt
+
+      - name: Check for CVEs
+        working-directory: ./templates/python-fastapi
+        run: |
+          pip install pip-audit
+          pip-audit || true
+
+      - name: Test server startup
+        working-directory: ./templates/python-fastapi
+        run: |
+          timeout 10s python main.py &
+          sleep 5
+          curl -f http://localhost:8000/health || exit 1
+          curl -f http://localhost:8000/hello || exit 1
+
+  test-static-server:
+    name: Test Static Server Template
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate HTML
+        working-directory: ./templates/static-server
+        run: |
+          # Check files exist
+          test -f index.html
+          test -f style.css
+          test -f index.js
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Test with http-server
+        working-directory: ./templates/static-server
+        run: |
+          npx http-server -p 8000 &
+          sleep 3
+          curl -f http://localhost:8000/ || exit 1
 
   # Job de résumé qui échoue si un des tests échoue
   all-tests-passed:
@@ -303,6 +477,13 @@ jobs:
       - test-python
       - test-c
       - test-php
+      - test-go
+      - test-cpp
+      - test-rust
+      - test-node-ts
+      - test-node-fastify
+      - test-python-fastapi
+      - test-static-server
     steps:
       - name: All tests passed
         run: echo "✅ All templates tested successfully!"

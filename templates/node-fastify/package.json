@@ -1,0 +1,24 @@
+{
+  "name": "node-fastify-template",
+  "version": "1.0.0",
+  "description": "Template Node.js TypeScript avec Fastify",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": ["fastify", "typescript", "api"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^5.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
