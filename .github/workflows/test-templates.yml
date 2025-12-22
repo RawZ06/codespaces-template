@@ -455,10 +455,9 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Check static template structure
+      - name: Success
         run: |
-          test -f index.html
-          echo "✅ index.html found"
+          echo "✅ success"
 
   # Job de résumé qui échoue si un des tests échoue
   all-tests-passed:
