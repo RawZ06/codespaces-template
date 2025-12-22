@@ -22,238 +22,175 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Create output directory
-        run: mkdir -p output
+      - name: Prepare output directory
+        run: |
+          rm -rf output
+          mkdir -p output
 
-      # -------------------
-      # Node.js
-      # -------------------
-      - name: Zip Node.js template
+      # ===================
+      # NODE
+      # ===================
+      - name: Zip node
         run: |
           cd templates/node
-          zip -r ../../output/node.zip . \
-            -x "*/node_modules/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/node.zip . -x "*/node_modules/*" "*/.DS_Store"
           cd ../..
 
-      - name: Zip Node TS template
+      - name: Zip node-ts
         run: |
           cd templates/node-ts
-          zip -r ../../output/node-ts.zip . \
-            -x "*/node_modules/*" \
-            -x "*/dist/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/node-ts.zip . -x "*/node_modules/*" "*/dist/*" "*/.DS_Store"
           cd ../..
 
-      - name: Zip Node Fastify template
+      - name: Zip node-fastify
         run: |
           cd templates/node-fastify
-          zip -r ../../output/node-fastify.zip . \
-            -x "*/node_modules/*" \
-            -x "*/dist/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/node-fastify.zip . -x "*/node_modules/*" "*/dist/*" "*/.DS_Store"
           cd ../..
 
-      # -------------------
-      # Frontend
-      # -------------------
-      - name: Zip React template
+      # ===================
+      # FRONTEND
+      # ===================
+      - name: Zip react
         run: |
           cd templates/react
-          zip -r ../../output/react.zip . \
-            -x "*/node_modules/*" \
-            -x "*/dist/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/react.zip . -x "*/node_modules/*" "*/dist/*" "*/.DS_Store"
           cd ../..
 
-      - name: Zip Vue template
+      - name: Zip vue
         run: |
           cd templates/vue
-          zip -r ../../output/vue.zip . \
-            -x "*/node_modules/*" \
-            -x "*/dist/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/vue.zip . -x "*/node_modules/*" "*/dist/*" "*/.DS_Store"
           cd ../..
 
-      - name: Zip Angular template
+      - name: Zip angular
         run: |
           cd templates/angular
-          zip -r ../../output/angular.zip . \
-            -x "*/node_modules/*" \
-            -x "*/dist/*" \
-            -x "*/.angular/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/angular.zip . -x "*/node_modules/*" "*/dist/*" "*/.angular/*" "*/.DS_Store"
           cd ../..
 
-      - name: Zip Next.js template
+      - name: Zip nextjs
         run: |
           cd templates/nextjs
-          zip -r ../../output/nextjs.zip . \
-            -x "*/node_modules/*" \
-            -x "*/.next/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/nextjs.zip . -x "*/node_modules/*" "*/.next/*" "*/.DS_Store"
           cd ../..
 
-      - name: Zip Nuxt template
+      - name: Zip nuxt
         run: |
           cd templates/nuxt
-          zip -r ../../output/nuxt.zip . \
-            -x "*/node_modules/*" \
-            -x "*/.nuxt/*" \
-            -x "*/.output/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/nuxt.zip . -x "*/node_modules/*" "*/.nuxt/*" "*/.output/*" "*/.DS_Store"
           cd ../..
 
-      # -------------------
-      # Backend frameworks
-      # -------------------
-      - name: Zip NestJS template
+      # ===================
+      # BACKEND
+      # ===================
+      - name: Zip nestjs
         run: |
           cd templates/nestjs
-          zip -r ../../output/nestjs.zip . \
-            -x "*/node_modules/*" \
-            -x "*/dist/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/nestjs.zip . -x "*/node_modules/*" "*/dist/*" "*/.DS_Store"
           cd ../..
 
-      - name: Zip Laravel template
+      - name: Zip laravel
         run: |
           cd templates/laravel
           zip -r ../../output/laravel.zip . \
-            -x "*/node_modules/*" \
-            -x "*/vendor/*" \
-            -x "*/storage/*" \
-            -x "*/bootstrap/cache/*" \
-            -x "*/.DS_Store"
+            -x "*/node_modules/*" "*/vendor/*" "*/storage/*" "*/bootstrap/cache/*" "*/.DS_Store"
           cd ../..
 
-      - name: Zip Adonis template
+      - name: Zip adonis
         run: |
           cd templates/adonis
-          zip -r ../../output/adonis.zip . \
-            -x "*/node_modules/*" \
-            -x "*/build/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/adonis.zip . -x "*/node_modules/*" "*/build/*" "*/.DS_Store"
           cd ../..
 
-      # -------------------
-      # Java
-      # -------------------
-      - name: Zip Java Vanilla template
+      # ===================
+      # JAVA
+      # ===================
+      - name: Zip java-vanilla
         run: |
           cd templates/java-vanilla
           zip -r ../../output/java-vanilla.zip . \
-            -x "*/target/*" \
-            -x "*/.mvn/*" \
-            -x "*/mvnw" \
-            -x "*/mvnw.cmd" \
-            -x "*/.DS_Store"
+            -x "*/target/*" "*/.mvn/*" "*/mvnw" "*/mvnw.cmd" "*/.DS_Store"
           cd ../..
 
-      - name: Zip Java Spring Boot template
+      - name: Zip java-springboot
         run: |
           cd templates/java-springboot
           zip -r ../../output/java-springboot.zip . \
-            -x "*/target/*" \
-            -x "*/.mvn/*" \
-            -x "*/mvnw" \
-            -x "*/mvnw.cmd" \
-            -x "*/.DS_Store"
+            -x "*/target/*" "*/.mvn/*" "*/mvnw" "*/mvnw.cmd" "*/.DS_Store"
           cd ../..
 
-      # -------------------
-      # Python
-      # -------------------
-      - name: Zip Python template
+      # ===================
+      # PYTHON
+      # ===================
+      - name: Zip python
         run: |
           cd templates/python
           zip -r ../../output/python.zip . \
-            -x "*/__pycache__/*" \
-            -x "*/venv/*" \
-            -x "*/env/*" \
-            -x "*/.venv/*" \
-            -x "*/.DS_Store"
+            -x "*/__pycache__/*" "*/venv/*" "*/env/*" "*/.venv/*" "*/.DS_Store"
           cd ../..
 
-      - name: Zip Python FastAPI template
+      - name: Zip python-fastapi
         run: |
           cd templates/python-fastapi
           zip -r ../../output/python-fastapi.zip . \
-            -x "*/__pycache__/*" \
-            -x "*/venv/*" \
-            -x "*/env/*" \
-            -x "*/.venv/*" \
-            -x "*/.DS_Store"
+            -x "*/__pycache__/*" "*/venv/*" "*/env/*" "*/.venv/*" "*/.DS_Store"
           cd ../..
 
-      # -------------------
-      # Low-level / others
-      # -------------------
-      - name: Zip C template
+      # ===================
+      # SYSTEM / LOW LEVEL
+      # ===================
+      - name: Zip c
         run: |
           cd templates/c
-          zip -r ../../output/c.zip . \
-            -x "*/obj/*" \
-            -x "*/bin/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/c.zip . -x "*/obj/*" "*/bin/*" "*/.DS_Store"
           cd ../..
 
-      - name: Zip C++ template
+      - name: Zip cpp
         run: |
           cd templates/cpp
-          zip -r ../../output/cpp.zip . \
-            -x "*/bin/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/cpp.zip . -x "*/bin/*" "*/.DS_Store"
           cd ../..
 
-      - name: Zip Rust template
+      - name: Zip rust
         run: |
           cd templates/rust
-          zip -r ../../output/rust.zip . \
-            -x "*/target/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/rust.zip . -x "*/target/*" "*/.DS_Store"
           cd ../..
 
-      - name: Zip Go template
+      - name: Zip go
         run: |
           cd templates/go
-          zip -r ../../output/go.zip . \
-            -x "*/.DS_Store"
+          zip -r ../../output/go.zip . -x "*/.DS_Store"
           cd ../..
 
-      - name: Zip PHP template
+      - name: Zip php
         run: |
           cd templates/php
-          zip -r ../../output/php.zip . \
-            -x "*/vendor/*" \
-            -x "*/.DS_Store"
+          zip -r ../../output/php.zip . -x "*/vendor/*" "*/.DS_Store"
           cd ../..
 
-      - name: Zip Static Server template
+      - name: Zip static-server
         run: |
           cd templates/static-server
-          zip -r ../../output/static-server.zip . \
-            -x "*/.DS_Store"
+          zip -r ../../output/static-server.zip . -x "*/.DS_Store"
           cd ../..
 
-      # -------------------
-      # Finalisation
-      # -------------------
-      - name: Display archive sizes
-        run: |
-          echo "📦 Archive sizes:"
-          ls -lh output/*.zip
+      # ===================
+      # FINAL
+      # ===================
+      - name: Show archive sizes
+        run: ls -lh output/*.zip
 
-      - name: Commit and push archives
+      - name: Commit and push
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
           git add output/*.zip
 
           if git diff --staged --quiet; then
-            echo "✅ No changes to commit"
+            echo "✅ No changes"
           else
             git commit -m "🤖 Update template archives [skip ci]"
             git push
-            echo "✅ Archives updated and pushed"
           fi
