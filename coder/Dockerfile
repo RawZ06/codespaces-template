@@ -16,6 +16,16 @@ ENV JAVA_VERSION=25.0.1-tem
 ENV MAVEN_VERSION=3.9.12
 ENV GRADLE_VERSION=9.2.1
 
+# Go ecosystem
+ENV ASDF_VERSION=v0.14.1
+# Go version will be project-driven via .tool-versions
+
+# Rust ecosystem
+# Rust version will be project-driven via rust-toolchain.toml
+
+# PHP ecosystem
+# PHP version will be project-driven via .tool-versions
+
 # Python (from Ubuntu 24.04 repos)
 # Python3 version: 3.12.x (managed by apt)
 
@@ -23,7 +33,10 @@ ENV GRADLE_VERSION=9.2.1
 # Docker: Latest stable from get.docker.com
 # ============================================================================
 
-# Install base dependencies
+# ============================================================================
+# BASE DEPENDENCIES
+# ============================================================================
+
 RUN apt-get update && apt-get install -y \
     curl \
     wget \
@@ -40,32 +53,51 @@ RUN apt-get update && apt-get install -y \
     python3-venv \
     zip \
     unzip \
+    pkg-config \
+    \
+    # PHP build deps (for asdf-php)
+    autoconf \
+    bison \
+    re2c \
+    libxml2-dev \
+    libsqlite3-dev \
+    libssl-dev \
+    libcurl4-openssl-dev \
+    libonig-dev \
+    libreadline-dev \
+    libzip-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Docker (Docker-in-Docker)
-#RUN curl -fsSL https://get.docker.com -o get-docker.sh && \
-#    sh get-docker.sh && \
-#    rm get-docker.sh
+# ============================================================================
+# LOCALES
+# ============================================================================
 
-# Configure locales
 RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
-# Create non-root user with zsh as default shell
+# ============================================================================
+# USER
+# ============================================================================
+
 RUN useradd -m -s /bin/bash coder && \
     echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Create working directories
 RUN mkdir -p /home/coder/workspace && \
     chown -R coder:coder /home/coder
 
-# Switch to coder user for installing nvm and sdkman
+# ============================================================================
+# USER CONTEXT
+# ============================================================================
+
 USER coder
 WORKDIR /home/coder
 
-# Install NVM (Node Version Manager) with fixed version
+# ============================================================================
+# NVM (Node Version Manager)
+# ============================================================================
+
 ENV NVM_DIR=/home/coder/.nvm
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh | bash && \
     . "$NVM_DIR/nvm.sh" && \
@@ -74,7 +106,10 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install
     nvm alias default ${NODE_VERSION} && \
     npm install -g pnpm@${PNPM_VERSION}
 
-# Install SDKMAN (for Java and other JVM languages) with fixed versions
+# ============================================================================
+# SDKMAN (Java ecosystem)
+# ============================================================================
+
 ENV SDKMAN_DIR=/home/coder/.sdkman
 RUN curl -s "https://get.sdkman.io?rcupdate=false" | bash && \
     bash -c "source $SDKMAN_DIR/bin/sdkman-init.sh && \
@@ -85,19 +120,58 @@ RUN curl -s "https://get.sdkman.io?rcupdate=false" | bash && \
     sdk default maven ${MAVEN_VERSION} && \
     sdk default gradle ${GRADLE_VERSION}"
 
-# Add nvm and sdkman to PATH for ALL shells (zshrc, bashrc, profile)
-RUN echo 'export NVM_DIR="$HOME/.nvm"' >> /home/coder/.zshrc && \
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/coder/.zshrc && \
-    echo 'export SDKMAN_DIR="$HOME/.sdkman"' >> /home/coder/.zshrc && \
-    echo '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"' >> /home/coder/.zshrc && \
-    echo 'export NVM_DIR="$HOME/.nvm"' >> /home/coder/.bashrc && \
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/coder/.bashrc && \
-    echo 'export SDKMAN_DIR="$HOME/.sdkman"' >> /home/coder/.bashrc && \
-    echo '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"' >> /home/coder/.bashrc && \
-    echo 'export NVM_DIR="$HOME/.nvm"' >> /home/coder/.profile && \
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /home/coder/.profile && \
-    echo 'export SDKMAN_DIR="$HOME/.sdkman"' >> /home/coder/.profile && \
-    echo '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"' >> /home/coder/.profile
+# ============================================================================
+# COMPOSER (PHP dependency manager)
+# ============================================================================
+
+RUN curl -sS https://getcomposer.org/installer | php -- \
+    --install-dir=/home/coder/.local/bin \
+    --filename=composer
+
+# ============================================================================
+# ASDF (Go, PHP, optional Python)
+# ============================================================================
+
+ENV ASDF_DIR=/home/coder/.asdf
+RUN git clone https://github.com/asdf-vm/asdf.git $ASDF_DIR --branch ${ASDF_VERSION}
+
+RUN bash -c "\
+    source $ASDF_DIR/asdf.sh && \
+    asdf plugin add golang https://github.com/asdf-community/asdf-golang.git && \
+    asdf plugin add php https://github.com/asdf-community/asdf-php.git \
+"
+
+# No global install → versions selected per project via .tool-versions
+
+# ============================================================================
+# RUST (rustup)
+# ============================================================================
+
+ENV CARGO_HOME=/home/coder/.cargo
+ENV RUSTUP_HOME=/home/coder/.rustup
+
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+# Rust version managed per project via rust-toolchain.toml
+
+# ============================================================================
+# SHELL CONFIG (bash / profile)
+# ============================================================================
+
+RUN echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc && \
+    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.bashrc && \
+    echo 'export SDKMAN_DIR="$HOME/.sdkman"' >> ~/.bashrc && \
+    echo '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"' >> ~/.bashrc && \
+    echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc && \
+    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc && \
+    \
+    echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.profile && \
+    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.profile && \
+    echo 'export SDKMAN_DIR="$HOME/.sdkman"' >> ~/.profile && \
+    echo '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"' >> ~/.profile && \
+    echo '. "$HOME/.asdf/asdf.sh"' >> ~/.profile && \
+    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.profile && \
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && \
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.profile
 
 WORKDIR /home/coder
 
