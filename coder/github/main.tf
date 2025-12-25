@@ -7,13 +7,24 @@ terraform {
     docker = {
       source = "kreuzwerker/docker"
     }
+    github = {
+      source  = "integrations/github"
+      version = "~> 6.0"
+    }
+
   }
 }
 
 locals {
   username        = data.coder_workspace_owner.me.name
-  github_repo_url = data.coder_parameter.github_repo[0].value
-  exposed_ports = length(trimspace(data.coder_parameter.ports.value)) > 0 ? split(",", replace(data.coder_parameter.ports.value, " ", "")) : []
+  github_repo_url = data.coder_parameter.github_repo.value
+  exposed_ports   = length(trimspace(data.coder_parameter.ports.value)) > 0 ? split(",", replace(data.coder_parameter.ports.value, " ", "")) : []
+  
+  # Construction directe des URLs de clone depuis les full_names (un seul appel GitHub)
+  repo_options = {
+    for full_name in data.github_repositories.mine.full_names :
+    full_name => "https://github.com/${full_name}.git"
+  }
 }
 
 variable "docker_socket" {
@@ -22,15 +33,28 @@ variable "docker_socket" {
   type        = string
 }
 
+# --- Paramètre Coder : liste déroulante ---
 data "coder_parameter" "github_repo" {
-  count        = 1
   name         = "github_repo"
-  display_name = "GitHub Repository URL"
-  description  = "Full GitHub repository URL (e.g., https://github.com/user/repo.git)"
-  default      = ""
+  display_name = "GitHub Repository"
+  description  = "Choisis un dépôt à cloner dans la workspace"
   type         = "string"
-  mutable      = false
+  form_type    = "dropdown"
+
+  # Défaut : le premier repo de la liste
+  default = try(local.repo_options[element(data.github_repositories.mine.full_names, 0)], "")
+
+  # Génère automatiquement les options depuis GitHub
+  dynamic "option" {
+    for_each = local.repo_options
+    content {
+      name  = option.key   # ex: "RawZ06/mon-repo"
+      value = option.value # ex: "https://github.com/RawZ06/mon-repo.git"
+      icon  = "/icon/github.svg"
+    }
+  }
 }
+
 
 data "coder_parameter" "ports" {
   name         = "ports"
@@ -45,9 +69,18 @@ provider "docker" {
   host = var.docker_socket != "" ? var.docker_socket : null
 }
 
+provider "github" {}
+
 data "coder_provisioner" "me" {}
 data "coder_workspace" "me" {}
 data "coder_workspace_owner" "me" {}
+
+# Un seul appel GitHub pour récupérer tous les repos
+data "github_repositories" "mine" {
+  query = "user:RawZ06"
+  sort  = "updated"
+}
+
 
 resource "coder_agent" "main" {
   arch = data.coder_provisioner.me.arch
@@ -68,7 +101,7 @@ resource "coder_agent" "main" {
       touch ~/.init_done
     fi
     
-    # Ensure NVM and SDKMAN are in bashrc (in case volume overwrote it)
+    # Ensure all environment variables are in bashrc (in case volume overwrote it)
     if ! grep -q "NVM_DIR" ~/.bashrc; then
       echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc
       echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.bashrc
@@ -77,13 +110,30 @@ resource "coder_agent" "main" {
       echo 'export SDKMAN_DIR="$HOME/.sdkman"' >> ~/.bashrc
       echo '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"' >> ~/.bashrc
     fi
+    if ! grep -q "CARGO_HOME" ~/.bashrc; then
+      echo 'export CARGO_HOME="$HOME/.cargo"' >> ~/.bashrc
+      echo 'export RUSTUP_HOME="$HOME/.rustup"' >> ~/.bashrc
+    fi
+    if ! grep -q "GOROOT" ~/.bashrc; then
+      echo 'export GOROOT="$HOME/.local/go"' >> ~/.bashrc
+      echo 'export GOPATH="$HOME/go"' >> ~/.bashrc
+    fi
+    if ! grep -q "\.local/bin" ~/.bashrc; then
+      echo 'export PATH="/usr/local/bin:/usr/bin:$GOROOT/bin:$GOPATH/bin:$CARGO_HOME/bin:$HOME/.local/bin:$PATH"' >> ~/.bashrc
+    fi
 
-    # Load NVM and SDKMAN for this session
+    # Load all environment variables for this session
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     export SDKMAN_DIR="$HOME/.sdkman"
     [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+    export CARGO_HOME="$HOME/.cargo"
+    export RUSTUP_HOME="$HOME/.rustup"
+    export GOROOT="$HOME/.local/go"
+    export GOPATH="$HOME/go"
+    export PATH="/usr/local/bin:/usr/bin:$GOROOT/bin:$GOPATH/bin:$CARGO_HOME/bin:$HOME/.local/bin:$PATH"
 
+    
     # Initialize workspace based on mode
     cd ~/workspace
     # Clone from GitHub repository
