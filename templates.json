@@ -141,7 +141,7 @@
     "icon": "https://github.com/RawZ06/codespaces-template/raw/main/assets/laravel.svg",
     "url": "https://github.com/RawZ06/codespaces-template/raw/main/output/laravel.zip",
     "folder": "laravel",
-    "ports": [8000]
+    "ports": [8000, 5173]
   },
   {
     "name": "AdonisJS",
