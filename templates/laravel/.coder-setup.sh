@@ -16,4 +16,10 @@ touch database/database.sqlite
 echo "Running migrations..."
 php artisan migrate
 
+echo "Running seeding..."
+php artisan db:seed
+
+echo "Install front dependencies"
+pnpm install
+
 echo "Setup complete! Run 'php artisan serve' to start development server."
