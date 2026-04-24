@@ -1,9 +1,12 @@
-# Coder Templates
+# Coder Templates 🚀
 
 [![Test Templates](https://github.com/VOTRE-USER/templates/actions/workflows/test-templates.yml/badge.svg)](https://github.com/VOTRE-USER/templates/actions/workflows/test-templates.yml)
 [![Build Templates](https://github.com/VOTRE-USER/templates/actions/workflows/build-templates.yml/badge.svg)](https://github.com/VOTRE-USER/templates/actions/workflows/build-templates.yml)
 
-Collection de templates prêts à l'emploi pour initialiser des workspaces Coder.
+Collection de templates prêts à l'emploi pour initialiser des workspaces Coder, avec une infrastructure auto-hébergée complète.
+
+> [!TIP]
+> **Nouveau :** Un guide complet d'installation est disponible dans [**install.md**](./install.md).
 
 > ✅ Tous les templates sont testés automatiquement (build, tests, audit CVE) avant d'être packagés
 
@@ -254,7 +257,8 @@ zip -r ../../output/react.zip . -x "*/node_modules/*"
 
 ## 📚 Documentation
 
-Chaque template contient son propre README avec des instructions spécifiques.
+*   [**Guide d'installation complet**](./install.md) : Installer Coder, Traefik et Postgres.
+*   Chaque template contient son propre README avec des instructions spécifiques.
 
 ## 🤝 Contribution
 
