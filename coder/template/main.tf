@@ -124,7 +124,7 @@ resource "coder_agent" "main" {
       touch ~/.init_done
     fi
 
-    # Assurer que NVM et SDKMAN sont chargés
+    # Ensure all environment variables are in bashrc (in case volume overwrote it)
     if ! grep -q "NVM_DIR" ~/.bashrc; then
       echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc
       echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.bashrc
@@ -133,13 +133,29 @@ resource "coder_agent" "main" {
       echo 'export SDKMAN_DIR="$HOME/.sdkman"' >> ~/.bashrc
       echo '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"' >> ~/.bashrc
     fi
+    if ! grep -q "CARGO_HOME" ~/.bashrc; then
+      echo 'export CARGO_HOME="$HOME/.cargo"' >> ~/.bashrc
+      echo 'export RUSTUP_HOME="$HOME/.rustup"' >> ~/.bashrc
+    fi
+    if ! grep -q "GOROOT" ~/.bashrc; then
+      echo 'export GOROOT="$HOME/.local/go"' >> ~/.bashrc
+      echo 'export GOPATH="$HOME/go"' >> ~/.bashrc
+    fi
+    if ! grep -q "\.local/bin" ~/.bashrc; then
+      echo 'export PATH="/usr/local/bin:/usr/bin:$GOROOT/bin:$GOPATH/bin:$CARGO_HOME/bin:$HOME/.local/bin:$PATH"' >> ~/.bashrc
+    fi
 
-    # Charger les managers de versions pour cette session
+    # Load all environment variables for this session
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     export SDKMAN_DIR="$HOME/.sdkman"
     [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-
+    export CARGO_HOME="$HOME/.cargo"
+    export RUSTUP_HOME="$HOME/.rustup"
+    export GOROOT="$HOME/.local/go"
+    export GOPATH="$HOME/go"
+    export PATH="/usr/local/bin:/usr/bin:$GOROOT/bin:$GOPATH/bin:$CARGO_HOME/bin:$HOME/.local/bin:$PATH"
+    
     # Créer et se déplacer dans le dossier de travail
     mkdir -p ~/workspace
     cd ~/workspace
